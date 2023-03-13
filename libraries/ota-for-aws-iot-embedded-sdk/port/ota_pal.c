@@ -49,6 +49,7 @@
 #include "mbedtls/base64.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "../main/juicebox_src/JZapCore.h"
 
 #define OTA_HALF_SECOND_DELAY    pdMS_TO_TICKS( 500UL )
 #define ECDSA_INTEGER_LEN        32
@@ -546,7 +547,7 @@ OtaPalStatus_t IRAM_ATTR otaPal_ResetDevice( OtaFileContext_t * const pFileConte
 
     /* Short delay for debug log output before reset. */
     vTaskDelay( OTA_HALF_SECOND_DELAY );
-    esp_restart();
+    ZC_QueueReboot(RESET_REASON_OTA_TESTING_IMAGE);
     return OTA_PAL_COMBINE_ERR( OtaPalSuccess, 0 );
 }
 
