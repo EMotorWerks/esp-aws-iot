@@ -36,6 +36,7 @@
 
 #include "esp_partition.h"
 #include "../main/juicebox_src/JReboot.h"
+#include "../main/networking/wifi/app_wifi.h"
 
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
     #include "spi_flash_mmap.h"    
@@ -547,6 +548,7 @@ OtaPalStatus_t IRAM_ATTR otaPal_ResetDevice( OtaFileContext_t * const pFileConte
     ( void ) pFileContext;
 
     /* Short delay for debug log output before reset. */
+    JWifi_setSoftAPRebootFlag(true);
     vTaskDelay( OTA_HALF_SECOND_DELAY );
     Reboot_Queue(RESET_REASON_OTA);
     return OTA_PAL_COMBINE_ERR( OtaPalSuccess, 0 );
