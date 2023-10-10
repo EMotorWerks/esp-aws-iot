@@ -36,7 +36,7 @@
 
 #include "esp_partition.h"
 #include "../main/juicebox_src/JReboot.h"
-#include "../main/networking/wifi/app_wifi.h"
+#include "../main/networking/wifi/JWifi.h"
 
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
     #include "spi_flash_mmap.h"    
