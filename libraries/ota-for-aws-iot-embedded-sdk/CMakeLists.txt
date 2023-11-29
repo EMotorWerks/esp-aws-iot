@@ -52,4 +52,5 @@ idf_component_register(
 
 set_source_files_properties(
 "${CMAKE_CURRENT_LIST_DIR}/ota-for-aws-iot-embedded-sdk/source/ota.c"
-PROPERTIES COMPILE_FLAGS -Wno-format)
+"${CMAKE_CURRENT_LIST_DIR}/ota-for-aws-iot-embedded-sdk/source/ota_cbor.c"
+PROPERTIES COMPILE_FLAGS "-w")

@@ -8,3 +8,7 @@ idf_component_register(
         "${JSON_INCLUDE_PUBLIC_DIRS}"
         "."
 )
+
+set_source_files_properties(
+"${CMAKE_CURRENT_LIST_DIR}/coreJSON/source/core_json.c"
+PROPERTIES COMPILE_FLAGS "-w")
