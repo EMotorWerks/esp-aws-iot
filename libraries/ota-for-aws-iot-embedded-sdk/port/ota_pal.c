@@ -51,7 +51,6 @@
 #include "mbedtls/base64.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "../main/juicebox_src/JZapCore.h"
 
 #define OTA_HALF_SECOND_DELAY    pdMS_TO_TICKS( 500UL )
 #define ECDSA_INTEGER_LEN        32
