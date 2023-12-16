@@ -33,6 +33,7 @@
 
 #include "ota.h"
 #include "esp_err.h"
+#include "esp_spi_flash.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -232,6 +233,13 @@ esp_err_t otaPal_EraseLastBootPartition(void);
  *        - true:    If successful.
  */
 bool otaPal_SetCodeSigningCertificate(const char * pcCodeSigningCertificatePEM);
+
+void otaPal_GetFileChunk(void *    chunkPtr,
+                         uint32_t  fileOffset,
+                         uint32_t  chunkSize);
+                                   
+void otaPal_GetFileInfo(uint32_t      * fileSize,
+                        OtaFileType_t * fileType);
 
 #ifdef __cplusplus
 }

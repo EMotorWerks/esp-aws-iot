@@ -553,6 +553,33 @@ OtaPalStatus_t IRAM_ATTR otaPal_ResetDevice( OtaFileContext_t * const pFileConte
     return OTA_PAL_COMBINE_ERR( OtaPalSuccess, 0 );
 }
 
+void otaPal_GetFileInfo(uint32_t      * fileSize,
+                        OtaFileType_t * fileType)
+{
+    *fileSize = ota_ctx.cur_ota->fileSize;
+    *fileType = (OtaFileType_t)ota_ctx.cur_ota->fileType;
+}
+
+void otaPal_GetFileChunk(void *    chunkPtr,
+                         uint32_t  fileOffset,
+                         uint32_t  chunkSize)
+{
+    spi_flash_mmap_handle_t mmap_handle;
+    const void * filePtr;
+
+    esp_partition_mmap(ota_ctx.update_partition,
+                       fileOffset, 
+                       chunkSize,
+                       SPI_FLASH_MMAP_DATA,
+                       &filePtr,
+                       &mmap_handle);
+
+    memcpy(chunkPtr, filePtr, chunkSize);
+    // When done, unmap the partition
+    spi_flash_munmap(mmap_handle);
+
+}
+
 OtaPalStatus_t otaPal_ActivateNewImage( OtaFileContext_t * const pFileContext )
 {
     ( void ) pFileContext;
