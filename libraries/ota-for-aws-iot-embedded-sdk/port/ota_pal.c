@@ -35,8 +35,6 @@
 #include "hal/wdt_hal.h"
 
 #include "esp_partition.h"
-#include "../main/juicebox_src/JReboot.h"
-#include "../main/networking/wifi/JWifi.h"
 
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
     #include "spi_flash_mmap.h"    
@@ -542,17 +540,6 @@ OtaPalStatus_t otaPal_CloseFile( OtaFileContext_t * const pFileContext )
     return OTA_PAL_COMBINE_ERR( mainErr, 0 );
 }
 
-OtaPalStatus_t IRAM_ATTR otaPal_ResetDevice( OtaFileContext_t * const pFileContext )
-{
-    ( void ) pFileContext;
-
-    /* Short delay for debug log output before reset. */
-    JWifi_setSoftAPRebootFlag(true);
-    vTaskDelay( OTA_HALF_SECOND_DELAY );
-    Reboot_Queue(RESET_REASON_OTA);
-    return OTA_PAL_COMBINE_ERR( OtaPalSuccess, 0 );
-}
-
 void otaPal_GetFileInfo(uint32_t      * fileSize,
                         OtaFileType_t * fileType)
 {
@@ -590,7 +577,6 @@ OtaPalStatus_t otaPal_ActivateNewImage( OtaFileContext_t * const pFileContext )
         {
             LogError( ( "esp_ota_end failed!" ) );
             esp_partition_erase_range( ota_ctx.update_partition, 0, ota_ctx.update_partition->size );
-            otaPal_ResetDevice( pFileContext );
         }
 
         esp_err_t err = esp_ota_set_boot_partition( ota_ctx.update_partition );
@@ -601,12 +587,9 @@ OtaPalStatus_t otaPal_ActivateNewImage( OtaFileContext_t * const pFileContext )
             esp_partition_erase_range( ota_ctx.update_partition, 0, ota_ctx.update_partition->size );
             _esp_ota_ctx_clear( &ota_ctx );
         }
-
-        otaPal_ResetDevice( pFileContext );
     }
 
     _esp_ota_ctx_clear( &ota_ctx );
-    otaPal_ResetDevice( pFileContext );
     return OTA_PAL_COMBINE_ERR( OtaPalSuccess, 0 );
 }
 
